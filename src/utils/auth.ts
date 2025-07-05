@@ -28,7 +28,10 @@ type RegisterResponse={
     user_id:string,
     email_sent:boolean
 }
+type ForgotPasswordResponse = {
+    message:string
 
+}
 const userLogin=async(email:string,password:string):Promise<LoginDetails | null>=>{
     try {
         const response = await axios.post(`${SERVER}/auth/login`,{
@@ -60,5 +63,19 @@ const userRegister=async(email:string,password:string,username:string,full_name:
         return null;
     }
 }
+const forgotPassword = async(email:string):Promise<ForgotPasswordResponse | null>=>{
+    try {
+        const response= await axios.post(`${SERVER}/auth/forgot-password`,{
+            email:email
+        })
+        return response.data;
+        
+    } catch (error) {
+        console.log("An error occoured in forgot password endpoint",error)
+        return null;;
+        
+    }
 
-export {userLogin,userRegister};
+}
+
+export {userLogin,userRegister,forgotPassword};

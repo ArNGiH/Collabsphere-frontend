@@ -4,7 +4,7 @@ import axios from 'axios'
 const SERVER=process.env.NEXT_PUBLIC_URL
 console.log("Server url is",SERVER);
 
-type UserType={
+export type UserType={
   id: string;
   email: string;
   username: string;

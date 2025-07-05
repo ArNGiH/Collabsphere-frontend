@@ -2,6 +2,7 @@
 import { Input } from "@/Shadcn/ui/input";
 import { useState ,useEffect} from "react";
 import Image from "next/image";
+import { useAuthStore } from "@/store/authStore";
 import { Label } from "@/Shadcn/ui/label";
 import { useRouter } from "next/navigation";
 import { Button } from "@/Shadcn/ui/button";
@@ -13,6 +14,7 @@ export default function Authentication() {
   const[email,setEmail]=useState<string>('')
   const[password,setPassword]=useState<string>('')
   const [username,setUsername]=useState<string>('')
+  const {setAuth}=useAuthStore();
   const [isProcessing,setIsProcessing]=useState<boolean>(false);
   const [fullname,setFullname]=useState<string>('');
   const [isLoginValid,setIsLoginValid]=useState<boolean>(false);
@@ -42,8 +44,10 @@ export default function Authentication() {
     setIsProcessing(true);
     try {
       const response=await userLogin(email,password);
+      if (!response) throw new Error();
       console.log("Response is",response);
       toast.success('You have been logged in successfully');
+      setAuth(response.user, response.access_token);
       router.push('/');
     } catch (error) {
       console.log('An error occoured in login',error)

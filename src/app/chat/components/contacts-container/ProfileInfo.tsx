@@ -2,8 +2,15 @@
 import { useAuthStore } from "@/store/authStore";
 import Image from "next/image";
 import { FiLogOut } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 const ProfileInfo=()=>{
     const {user,clearAuth}=useAuthStore()
+    const router=useRouter();
+    const handleLogout=()=>{
+    clearAuth(); 
+    sessionStorage.removeItem("auth");
+    router.push("/auth"); 
+    }
     if(!user){
         return null;
     }
@@ -23,7 +30,7 @@ const ProfileInfo=()=>{
                 </div>
             </div>
             <button 
-            onClick={clearAuth}
+            onClick={handleLogout}
             className="text-gray-400 hover:text-red-500 cursor-pointer transition-colors duration-200"
             title="Logout"
             >

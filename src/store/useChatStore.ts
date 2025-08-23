@@ -1,5 +1,8 @@
+// store/useChatStore.ts
+'use client';
+
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 type User = {
   id: string;
@@ -16,7 +19,7 @@ type Chat = {
 };
 
 interface ChatState {
-  chats: Chat[] ;
+  chats: Chat[];
   currentChat?: Chat;
   setChats: (chats: Chat[] | undefined) => void;
   setCurrentChat: (chat: Chat | undefined) => void;
@@ -37,11 +40,12 @@ export const useChatStore = create<ChatState>()(
         })),
     }),
     {
-      name: 'chat-storage', 
+      name: 'chat-storage',
+      storage: createJSONStorage(() => sessionStorage), // ← session storage
       partialize: (state) => ({
         chats: state.chats,
         currentChat: state.currentChat,
-      }), 
+      }),
     }
   )
 );

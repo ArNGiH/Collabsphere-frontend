@@ -1,19 +1,20 @@
 'use client'
-// import { useEffect } from "react"
-// import { useRouter } from "next/navigation"
-// import { toast } from "react-toastify"
-import { useState } from "react";
+import ChatTopBar from "./ChatTopBar";
 import ContactsContainer from "./components/contacts-container/ContactsContainer";
 import EmptyChatContainer from "./components/empty-chat-container-/EmptyChat";
+import { useChatStore } from "@/store/useChatStore";
 import ChatContainer from "./components/chat-container/ChatContainer";
 
 export default function ChatController() {
-  const [selectedChatId, ] = useState<string | null>('1'); // demo purpose
+ const currentChatId = useChatStore((s) => s.currentChat?.id || null);
 
   return (
     <div className="flex w-screen h-screen text-white overflow-hidden">
       <ContactsContainer />
-      {selectedChatId ? <ChatContainer /> : <EmptyChatContainer />}
+        <div className="flex-1 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] bg-[#1c1d25] flex flex-col">
+        <ChatTopBar />
+        {currentChatId ? <ChatContainer /> : <EmptyChatContainer />}
+      </div>
     </div>
   );
 }

@@ -1,17 +1,21 @@
 import axios from 'axios'
 const SERVER=process.env.NEXT_PUBLIC_URL;
-type CurrentChatsResponse={
-    id:string,
-    name:string,
-    type:string,
-    created_at:string,
-    updated_at:string,
-    other_user_id:string,
-    other_user_image:string,
-    other_user_name:string
-}
+export type ParticipantMini = {
+  id: string;
+  display_name: string;
+  avatar_url: string | null;
+};
 
-const fetchCurrentChats=async(token:string):Promise<CurrentChatsResponse[] | null>=>{
+export type CurrentChatsResponse = {
+  id: string;
+  type: 'private' | 'group';
+  display_name: string;    
+  name: string | null;       
+  participants: ParticipantMini[];
+  created_at: string;
+};
+
+const fetchCurrentChats=async(token:string | null):Promise<CurrentChatsResponse[] | null>=>{
     try {
         const response=axios.get(`${SERVER}/chat/current-chats`,{
             headers:{
@@ -22,8 +26,28 @@ const fetchCurrentChats=async(token:string):Promise<CurrentChatsResponse[] | nul
         
     } catch (e) {
         console.log("An error occoured in fetching the current chat",e)
-        return null;
+        return [];
         
     }
 }
 export default fetchCurrentChats;
+
+
+// utils/api/chat.ts
+export type CreateChatPayload = {
+  name: string;
+  type: 'private' | 'group';
+  participant_ids: string[];
+};
+
+export async function createNewChat(payload: CreateChatPayload, token: string | null): Promise<{ id: string }> {
+  const res = await fetch(`${SERVER}/chat/create-new-chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(payload),
+    cache: 'no-store',
+    credentials: 'omit',
+  });
+  if (!res.ok) throw new Error(`Create chat failed: ${res.status}`);
+  return res.json();
+}

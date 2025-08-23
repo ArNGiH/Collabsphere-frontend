@@ -122,3 +122,21 @@
     @apply bg-background text-foreground;
   }
 }
+/* globals.css */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px; /* scrollbar thickness */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1b1c24; /* match container bg */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #2f303b; /* darker thumb */
+  border-radius: 8px;
+  border: 2px solid #1b1c24; /* padding effect */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #3a3b47; /* hover color */
+}

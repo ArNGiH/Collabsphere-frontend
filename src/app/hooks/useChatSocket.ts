@@ -298,6 +298,11 @@ export function useChatSocket(chatId: string | null, opts: UseChatSocketOptions 
     setConnecting(false);
   }, [clearTimers]);
 
+  const resetMessages = useCallback(() => {
+  setMessages([]);
+}, []);
+
+
   return {
     connected,
     connecting,
@@ -308,5 +313,6 @@ export function useChatSocket(chatId: string | null, opts: UseChatSocketOptions 
     sendMessage,
     setTyping,
     disconnect,
+    resetMessages
   };
 }

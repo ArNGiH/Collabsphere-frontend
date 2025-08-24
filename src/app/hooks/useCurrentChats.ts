@@ -5,7 +5,7 @@ import fetchCurrentChats, { CurrentChatsResponse } from '@/utils/chat';
 import { useAuthStore } from '@/store/authStore';
 import { useChatStore } from '@/store/useChatStore'; 
 
-const mapToStoreChat = (api: CurrentChatsResponse) => ({
+export const mapToStoreChat = (api: CurrentChatsResponse) => ({
   id: api.id,
   name: api.display_name,            
   type: api.type,        
@@ -30,7 +30,7 @@ export const useCurrentChats = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchCurrentChats(token); // should return CurrentChatsResponse[] (or [])
+      const data = await fetchCurrentChats(token); 
       if (!mounted.current) return;
       const mapped = (data ?? []).map(mapToStoreChat);
       setChats(mapped);

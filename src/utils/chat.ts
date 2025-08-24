@@ -115,3 +115,29 @@ export async function getChatHistory(
   if (opts?.mapToWsShape === false) return data;
   return data.map(toChatMessage);
 }
+
+/************************************************************************************************ */
+
+export async function clearChatMessages(chatId: string): Promise<string> {
+  const token = useAuthStore.getState().token;
+  if (!token) throw new Error('Missing auth token');
+  if (!chatId) throw new Error('Missing chatId');
+
+  const url = `${SERVER}/chat/clear-messages/${encodeURIComponent(chatId)}`;
+
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`clearChatMessages ${res.status}: ${text || res.statusText}`);
+  }
+  const data = await res.json();
+  return data;
+}

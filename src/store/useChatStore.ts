@@ -4,14 +4,14 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-type User = {
+export type User = {
   id: string;
   name: string;
   email?: string;
   avatarUrl?: string | null;
 };
 
-type Chat = {
+export type Chat = {
   id: string;
   name: string;
   type: 'private' | 'group';
@@ -41,7 +41,7 @@ export const useChatStore = create<ChatState>()(
     }),
     {
       name: 'chat-storage',
-      storage: createJSONStorage(() => sessionStorage), // ← session storage
+      storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         chats: state.chats,
         currentChat: state.currentChat,

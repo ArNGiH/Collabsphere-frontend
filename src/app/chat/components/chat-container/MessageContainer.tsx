@@ -25,6 +25,18 @@ export default function MessageContainer({
   const [history, setHistory] = useState<ChatMessage[]>([]);
 
   useEffect(() => {
+    function onCleared(e: any) {
+      if (e?.detail?.chatId === chatId) {
+        setHistory([]);
+        void (async () =>
+          setHistory((await getChatHistory(chatId)) as ChatMessage[]))();
+      }
+    }
+    window.addEventListener("chat:cleared", onCleared);
+    return () => window.removeEventListener("chat:cleared", onCleared);
+  }, [chatId]);
+
+  useEffect(() => {
     const fetchChatHistory = async () => {
       try {
         if (!chatId) {

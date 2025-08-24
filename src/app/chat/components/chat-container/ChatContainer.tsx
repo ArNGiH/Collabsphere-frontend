@@ -6,16 +6,27 @@ import MessageContainer from './MessageContainer';
 import { useChatSocket } from '@/app/hooks/useChatSocket';
 import { useChatStore } from '@/store/useChatStore';
 import { useAuthStore } from '@/store/authStore';
-import { useCallback } from 'react';
+import { useCallback,useEffect } from 'react';
 import { WsEvent } from '@/app/hooks/useChatSocket';
 
 export default function ChatContainer() {
   const chatId = useChatStore((s) => s.currentChat?.id ?? null);
   const userId= useAuthStore((s)=>s.user?.id)
+  const { resetMessages } = useChatSocket(chatId);
 
   const handleEvent = useCallback((e: WsEvent) => {
   console.log("WS:", e);
 }, []);
+
+useEffect(() => {
+  function onCleared(e) {
+    if (e?.detail?.chatId === chatId) {
+      resetMessages(); 
+    }
+  }
+  window.addEventListener('chat:cleared', onCleared);
+  return () => window.removeEventListener('chat:cleared', onCleared);
+}, [chatId, resetMessages]);
 
 
    const socket = useChatSocket(chatId, {

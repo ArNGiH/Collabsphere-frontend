@@ -5,11 +5,10 @@ import fetchCurrentChats, { CurrentChatsResponse } from '@/utils/chat';
 import { useAuthStore } from '@/store/authStore';
 import { useChatStore } from '@/store/useChatStore'; 
 
-// Map API -> store Chat
 const mapToStoreChat = (api: CurrentChatsResponse) => ({
   id: api.id,
-  name: api.display_name,            // unified display name
-  type: api.type,                    // 'private' | 'group'
+  name: api.display_name,            
+  type: api.type,        
   participants: (api.participants ?? []).map((p) => ({
     id: p.id,
     name: p.display_name,

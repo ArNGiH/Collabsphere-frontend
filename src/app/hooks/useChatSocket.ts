@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useCallback, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 
-/** Events */
+
 type NewMessageEvent = {
   type: 'new_message';
   data: {

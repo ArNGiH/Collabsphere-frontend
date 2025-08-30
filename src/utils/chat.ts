@@ -148,3 +148,40 @@ export async function clearChatMessages(chatId: string): Promise<string> {
 }
 
 /****************************************************************************************************** */
+
+export async function uploadMedia({
+  file,
+  chatId,
+  content,
+}: {
+  file: File;
+  chatId: string | undefined;
+  content?: string | null;
+}) {
+  if(!chatId){
+    return ;
+  }
+
+  const token = useAuthStore.getState().token;
+  if (!token) throw new Error("Missing auth token");
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("chat_id", chatId);
+  if (content) {
+    formData.append("content", content);
+  }
+
+  const res = await fetch(`${SERVER}/media/upload`, {
+    method: "POST",
+    body: formData,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to upload media: ${res.status}`);
+  }
+
+  return res.json(); 
+}

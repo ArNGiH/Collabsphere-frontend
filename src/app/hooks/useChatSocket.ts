@@ -11,8 +11,11 @@ type NewMessageEvent = {
     sender_id: string;
     content: string;
     created_at: string;
-  };
+    media_url?: string;
+  media_type?: string;  
+    
 };
+}
 type PresenceEvent = {
   type: 'presence_update';
   data: {
@@ -265,15 +268,27 @@ export function useChatSocket(chatId: string | null, opts: UseChatSocketOptions 
       setOnline({});
     };
   }, [url, clearTimers]);
-
-  /** Public API */
-  const sendMessage = useCallback((content: string) => {
+const sendMessage = useCallback(
+  (content?: string, media?: { media_url: string; media_type: string }) => {
     const ws = wsRef.current;
-    const c = content?.trim();
-    if (!ws || ws.readyState !== WebSocket.OPEN || !c) return false;
-    ws.send(JSON.stringify({ content: c }));
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+
+    const payload: Record<string, any> = {};
+    if (content?.trim()) payload.content = content.trim();
+    if (media) {
+      payload.media_url = media.media_url;
+      payload.media_type = media.media_type;
+    }
+
+    if (!payload.content && !payload.media_url) return false;
+
+    ws.send(JSON.stringify(payload));
     return true;
-  }, []);
+  },
+  []
+);
+
+
 
   const setTyping = useCallback((isTyping: boolean) => {
     const ws = wsRef.current;

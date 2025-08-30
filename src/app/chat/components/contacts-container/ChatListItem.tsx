@@ -74,7 +74,7 @@ export default function ChatListItem({ chat }: { chat: Chat }) {
 
   return (
     <div
-      className="flex items-center gap-3 px-4 py-2 hover:bg-[#2a2b33] rounded-lg transition-all"
+      className="flex items-center cursor-pointer gap-3 px-4 py-2 hover:bg-[#2a2b33] rounded-lg transition-all"
       role="button"
       tabIndex={0}
       onClick={handleOpenChat}
@@ -92,7 +92,7 @@ export default function ChatListItem({ chat }: { chat: Chat }) {
       <div className="relative" onClick={(e) => e.stopPropagation()} ref={menuRef}>
         <button
           type="button"
-          className="p-1.5 rounded hover:bg-[#3a3b44] focus:outline-none focus:ring-2 focus:ring-violet-700"
+          className="p-1.5 rounded cursor-pointer hover:bg-[#3a3b44] focus:outline-none focus:ring-2 focus:ring-violet-700"
           aria-haspopup="menu"
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((v) => !v)}
@@ -111,7 +111,7 @@ export default function ChatListItem({ chat }: { chat: Chat }) {
             className="absolute right-0 z-20 mt-2 w-40 rounded-md bg-[#1f2028] border border-[#2d2e36] shadow-lg overflow-hidden"
           >
             <button
-              className="w-full text-left px-3 py-2 text-sm text-red-300 hover:bg-[#2a2b33] disabled:opacity-50"
+              className="w-full text-lef cursor-pointer px-3 py-2 text-sm text-red-300 hover:bg-[#2a2b33] disabled:opacity-50"
               onClick={handleDelete}
               disabled={busy}
               role="menuitem"

@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChatMessage } from "@/app/hooks/useChatSocket";
 import { useChatStore } from "@/store/useChatStore";
 import { getChatHistory } from "@/utils/chat";
+import Image from "next/image";
 
 type MessageProps = {
   messages: ChatMessage[];
@@ -111,6 +112,30 @@ export default function MessageContainer({
                 <div className={`px-3 py-2 ${bubble} shadow-sm`}>
                   <div className="text-sm whitespace-pre-wrap break-words">
                     {m.content}
+
+                    {m.media_url && m.media_type === "image" && (
+                      <div className="mt-2">
+                        <Image
+                          src={m.media_url}
+                          width={300}
+                          height={300}
+                          alt="attachment"
+                          className="max-h-64 rounded-md"
+                        />
+                      </div>
+                    )}
+
+                    {m.media_url && m.media_type !== "image" && (
+                      <div className="mt-2 text-xs text-blue-400 underline">
+                        <a
+                          href={m.media_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Download file
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div
